@@ -294,6 +294,7 @@ class DetectAndTrack:
     tuple
       Returns the output of postprocess()  
     """
+
     blob = cv2.dnn.blobFromImage(frame, 
                                  scalefactor=1/255,
                                  size=(self.input_width,self.input_height),
@@ -357,7 +358,7 @@ class DetectAndTrack:
 
       self.draw_predictions(frame, conf, True)
       cv2.imshow("Frame", frame)
-      if cv2.waitKey(10) & 0xFF == 27:
+      if cv2.waitKey(0) & 0xFF == 27:
         return True
 
       if not detected:
@@ -395,7 +396,7 @@ class DetectAndTrack:
 
           self.draw_predictions(frame, track_confidence, False)
           cv2.imshow("Frame", frame)
-          if cv2.waitKey(10) & 0xFF == 27:
+          if cv2.waitKey(0) & 0xFF == 27:
             return True
 
     return True
