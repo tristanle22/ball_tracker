@@ -1,0 +1,20 @@
+{
+  "detector_settings" : {
+    "objectness_threshold" : 0.50,
+    "confidence_threshold" : 0.90,
+    "nms_threshold" : 0.4,
+    "input_width" : 416,
+    "input_height" : 416,
+    "object_class_id" : 32,
+    "model" : {
+      "config_file" : "./models/yolov3.cfg",
+      "weight_file" : "./models/yolov3.weights",
+      "class_file" : "./models/coco.names"
+    }
+  },
+  "tracker_settings" : {
+    "tracker_type" : "KCF",
+    "lost_track_duration_threshold" : 10,
+    "max_tracking_duration" : 90
+  }
+}
