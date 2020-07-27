@@ -23,14 +23,17 @@ Then simply run `python3 main.py [flag] [path_to_video]`
 
 ## Limitations
 - Inference takes too long, resulting in jagged video feed. This is because I'm using a detector that's built for 80 classes to detect only 1 class.
+- Low frame rate if no object is detected.
 - Lacking the ability to write and save the video that contains the bounding boxes. 
-- Lacking the ability to detect and track multiple objects
+- Lacking the ability to detect and track multiple objects.
+- Only allow tracking objects that have > 90% detection confidence.
 
 ## What's next?
 - Build my own neural net for object detection.
 - Implement a Kalman filter to track the detected object and compare the performance with OpenCV Tracking API, cuz why not?
 - Implement multi-object detection and tracking.
 - Build a ball-tracking robot. Why? Because I'm a Mechatronics Engineering student, I want to integrate everything I have learned into a robot :D
+
 ## Credits
 Big thanks to @spmallick, @jrosebr1 for providing great learning resources. Huge credit to @pjreddie for his work on the YOLO v3 object detector.
 The YOLO v3 model used in this project can be found [here](https://pjreddie.com/darknet/yolo/)
