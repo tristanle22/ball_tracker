@@ -29,6 +29,7 @@ Then simply run `python3 main.py [flag] [path_to_video]`
 - Only allow tracking objects that have > 90% detection confidence.
 
 ## What's next?
+- Speed up inference.
 - Build my own neural net for object detection.
 - Implement a Kalman filter to track the detected object and compare the performance with OpenCV Tracking API, cuz why not?
 - Implement multi-object detection and tracking.
