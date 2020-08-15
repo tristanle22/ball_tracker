@@ -183,13 +183,15 @@ class DetectAndTrack:
     layer_names = self.net.getLayerNames()
     self.output_layers_names = [layer_names[i[0]-1] for i in self.net.getUnconnectedOutLayers()]
 
-  def draw_predictions(self, frame, conf, draw_detection):
+  def draw_predictions(self, frame, fps, conf, draw_detection):
     """ Draw the bounding boxes and annotate the object
 
     Parameters
     ----------
     frame: np.ndarray
       The frame to be drawn on
+    fps: int
+      Frame per second
     conf: float
       The confidence score of how likely the object belongs to the selected class
     draw_detection: bool
@@ -197,6 +199,14 @@ class DetectAndTrack:
     """
 
     if draw_detection:
+      cv2.putText(frame, 
+                  text="FPS : " + str(int(fps)), 
+                  org=(20,80),
+                  fontFace=cv2.FONT_HERSHEY_SIMPLEX, 
+                  fontScale=1,
+                  color=self.detector_box_color, 
+                  thickness=2, 
+                  lineType=cv2.LINE_AA)
       cv2.rectangle(frame, 
                     pt1=(self.cur_bbox[0], self.cur_bbox[1]), 
                     pt2=(self.cur_bbox[0]+self.cur_bbox[2], self.cur_bbox[1]+self.cur_bbox[3]), 
@@ -208,6 +218,14 @@ class DetectAndTrack:
       else:
         label = 'Cannot detect object'
     else:
+      cv2.putText(frame, 
+                  text="FPS : " + str(int(fps)), 
+                  org=(20,80),
+                  fontFace=cv2.FONT_HERSHEY_SIMPLEX, 
+                  fontScale=1,
+                  color=self.tracker_box_color, 
+                  thickness=2, 
+                  lineType=cv2.LINE_AA)
       cv2.rectangle(frame, 
                     pt1=(self.cur_bbox[0], self.cur_bbox[1]), 
                     pt2=(self.cur_bbox[0]+self.cur_bbox[2], self.cur_bbox[1]+self.cur_bbox[3]), 
@@ -351,14 +369,13 @@ class DetectAndTrack:
         print("Fail to read first frame!")
         return True
 
-      # start = time.time()
+      timer = cv2.getTickCount()
       detected, conf = self.detect(frame)
-      # end = time.time()
-      # print("Detection run time: {} ms".format(1000*(end-start)))
+      fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
 
-      self.draw_predictions(frame, conf, True)
+      self.draw_predictions(frame, fps, conf, True)
       cv2.imshow("Frame", frame)
-      if cv2.waitKey(0) & 0xFF == 27:
+      if cv2.waitKey(10) & 0xFF == 27:
         return True
 
       if not detected:
@@ -383,7 +400,9 @@ class DetectAndTrack:
             print("Fail to read frame to track!")
             return True
 
+          timer = cv2.getTickCount()
           track_ok = self.track(frame, tracker)
+
           if not track_ok:
             track_confidence = -1
             lost_track_count += 1
@@ -394,9 +413,10 @@ class DetectAndTrack:
             track_confidence = 100
             lost_track_count = 0
 
-          self.draw_predictions(frame, track_confidence, False)
+          fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
+          self.draw_predictions(frame, fps, track_confidence, False)
           cv2.imshow("Frame", frame)
-          if cv2.waitKey(0) & 0xFF == 27:
+          if cv2.waitKey(10) & 0xFF == 27:
             return True
 
     return True
