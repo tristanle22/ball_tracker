@@ -416,8 +416,15 @@ class DetectAndTrack:
           fps = cv2.getTickFrequency() / (cv2.getTickCount() - timer)
           self.draw_predictions(frame, fps, track_confidence, False)
           cv2.imshow("Frame", frame)
-          if cv2.waitKey(10) & 0xFF == 27:
+          # if cv2.waitKey(10) & 0xFF == 27:
+          #   return True
+
+          k = cv2.waitKey(10)
+          if k == ord('p'):
+            cv2.waitKey(0)
+          elif k & 0xFF == 27:
             return True
+
 
     return True
     
